@@ -1,0 +1,33 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.78'
+}
+
+version = mod_version
+group = 'fr.citizen.quetes'
+base { archivesName = 'citizenquetes' }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    // Version imposée : net.neoforged:neoforge:21.1.215
+    version = project.neo_version
+    runs {
+        server { server() }
+    }
+    mods {
+        citizenquetes { sourceSet sourceSets.main }
+    }
+}
+
+dependencies {
+    // Citizen Economy (virements) : le .jar de la dernière Release est téléchargé par GitHub Actions dans libs/
+    compileOnly fileTree(dir: 'libs', include: '*.jar')
+}
+
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+
+processResources {
+    inputs.property 'mod_version', mod_version
+    filesMatching('META-INF/neoforge.mods.toml') { expand mod_version: mod_version }
+}

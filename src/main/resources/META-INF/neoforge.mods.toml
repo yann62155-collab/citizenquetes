@@ -1,0 +1,38 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="citizenquetes"
+version="${mod_version}"
+displayName="Citizen Quêtes"
+authors="Ishawakiii"
+description='''Messagers du château (EasyNPC) qui viennent proposer des quêtes aux joueurs. Tout est automatique. Menus et HUD compatibles PC et console (Geyser).'''
+
+[[dependencies.citizenquetes]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.215,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.citizenquetes]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.citizenquetes]]
+modId="easy_npc"
+type="optional"
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.citizenquetes]]
+modId="citizeneconomy"
+type="optional"
+versionRange="*"
+ordering="NONE"
+side="SERVER"
