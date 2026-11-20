@@ -1,9 +1,12 @@
 package fr.citizen.quetes;
 
 import com.mojang.logging.LogUtils;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import org.slf4j.Logger;
 
 /**
@@ -29,8 +32,12 @@ public class CitizenQuetes {
         NeoForge.EVENT_BUS.addListener(QuestEvents::onLogin);
         NeoForge.EVENT_BUS.addListener(QuestEvents::onLogout);
         NeoForge.EVENT_BUS.addListener(QuestEvents::onDeath);
-        NeoForge.EVENT_BUS.addListener(QuestEvents::onInteract);
-        NeoForge.EVENT_BUS.addListener(QuestEvents::onInteractSpecific);
-        NeoForge.EVENT_BUS.addListener(QuestEvents::onEntityJoin);
+        // Protections de zones (WorldGuard-like : YAWP, FTB Chunks, Open Parties and Claims…) :
+        // on passe AVANT elles (HIGHEST) et même si elles ont déjà annulé l'événement (receiveCanceled).
+        NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, true, PlayerInteractEvent.EntityInteract.class, QuestEvents::onInteract);
+        NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, true, PlayerInteractEvent.EntityInteractSpecific.class, QuestEvents::onInteractSpecific);
+        NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, true, EntityJoinLevelEvent.class, QuestEvents::onEntityJoin);
+        // … et on passe EN DERNIER pour annuler un éventuel blocage d'apparition de nos messagers.
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, true, EntityJoinLevelEvent.class, QuestEvents::forceMessengerJoin);
     }
 }

@@ -128,6 +128,13 @@ public final class QuestEvents {
         }
     }
 
+    /** Passe au-dessus des protections de zones : un messager du mod a toujours le droit d'apparaître. */
+    static void forceMessengerJoin(EntityJoinLevelEvent e) {
+        if (e.getLevel().isClientSide() || !e.isCanceled()) return;
+        Entity entity = e.getEntity();
+        if (entity.getTags().contains(Messenger.TAG) && Messenger.isKnown(entity.getUUID())) e.setCanceled(false);
+    }
+
     /** Un ancien messager (après un crash, par exemple) qui réapparaît : on le supprime. */
     static void onEntityJoin(EntityJoinLevelEvent e) {
         if (e.getLevel().isClientSide()) return;
